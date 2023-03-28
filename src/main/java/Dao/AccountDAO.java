@@ -1,9 +1,6 @@
 package Dao;
-
-import Connections.MyConnection;
 import Connections.MyConnection;
 import model.Account;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;

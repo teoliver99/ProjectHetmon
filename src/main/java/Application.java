@@ -1,33 +1,23 @@
-import Dao.EmployeeDAO;
-import model.Department;
-import model.Employee;
 import service.AuthenService;
+import service.DepartmentService;
 import service.EmployeesService;
 import ui.UserInterface;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Application {
-    static EmployeeDAO employeeDAO = new EmployeeDAO();
-    static List<Employee> employeeList = new ArrayList<>();
-    static List<Department> departmentList = new ArrayList<>();
-    static Employee employee = new Employee();
-    static Department department = new Department();
     static AuthenService authenService = new AuthenService();
     static EmployeesService employeesService = new EmployeesService();
-
+    static DepartmentService departmentService = new DepartmentService();
     static UserInterface ui = new UserInterface();
-
     static Scanner in = new Scanner(System.in);
     static int option = -1;
 
-    // Main
+    // Hàm Main
     public static void main(String[] args) {
         checkLogin();
-        handleMenu();
+        handleMainMenu();
     }
+    // kiểm tra đăng nhập
     private static void checkLogin(){
         System.out.println("-----------------ĐĂNG NHẬP-----------------");
         int count = 3;
@@ -53,25 +43,37 @@ public class Application {
         }
         System.out.println("* Đăng nhập thành công *");
     }
-
-    private static void handleEmployeesManager(){
+    // xử lý menu nhân viên
+    private static void handleEmployeesMenu(){
         do {
             // Hiển thị menu nhân viên
             ui.showEmployeesMenu();
             // Nhập dữ liệu
-            inputMenu(12);
+            inputMenu(14);
             // Chọn menu
             switch (option) {
                 case 1 -> employeesService.showEmployees();
-                case 12 -> handleMenu();
+                case 2 -> employeesService.insertEmployee();
+                case 3 -> employeesService.updateEmployee();
+                case 4 -> employeesService.deleteEmployee();
+                case 5 -> employeesService.getEmployeeById();
+                case 6 -> departmentService.showDepartments();
+                case 7 -> departmentService.insertDepartment();
+                case 8 -> departmentService.updateDepartment();
+                case 9 -> departmentService.deleteDepartment();
+                case 10 -> employeesService.insertEmployeeToDepartment();
+                case 11 -> employeesService.deleteEmployeeFromDepartment();
+                case 12 -> employeesService.tranferDepartment();
+                case 13 -> employeesService.caculateTax();
+                case 14 -> handleMainMenu();
             }
 
         }
         while (option != 0);
         in.close();
     }
-
-    private static void handleAccountsManager(){
+    // Xử lý menu tài khoản
+    private static void handleAccountsMenu(){
         do {
             // Hiển thị menu tài khoản
             ui.showAccountMenu();
@@ -80,14 +82,18 @@ public class Application {
             // Chọn menu
             switch (option) {
                 case 1 -> authenService.showAllAccount();
-                case 6 -> handleMenu();
+                case 2 -> authenService.insertAccount();
+                case 3 -> authenService.updateAccount();
+                case 4 -> authenService.deleteAccount();
+                case 5 -> authenService.findAccount();
+                case 6 -> handleMainMenu();
             }
         }
         while (option != 0);
         in.close();
     }
-
-    private static void handleMenu(){
+    // Xử lý menu chính
+    private static void handleMainMenu(){
         do {
             // Hiển thị menu chính
             ui.showMainMenu();
@@ -95,10 +101,10 @@ public class Application {
             inputMenu(3);
             // Chọn menu
             switch (option) {
-                case 1 -> handleAccountsManager();
-                case 2 -> handleEmployeesManager();
+                case 1 -> handleAccountsMenu();
+                case 2 -> handleEmployeesMenu();
                 case 3 -> {
-                    System.out.println("Đăng xuất thành công");
+                    System.out.println("* Đăng xuất thành công *");
                     checkLogin();
                 }
             }
@@ -106,7 +112,7 @@ public class Application {
         while (option != 0);
         in.close();
     }
-
+    // Xử lý dữ liệu nhập vào khi chọn menu
     private static void inputMenu(int max) {
         boolean isCheck = false;
         System.out.print("Nhập lựa chọn: ");
